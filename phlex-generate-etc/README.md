@@ -5,3 +5,9 @@ This will checkout a fork/branch from the author of the tutorial into this direc
 will build within build-phlex-examples.
 
 The notebooks in `generate/`, `transport/`, and `drift/` will make use of that build directory.
+
+The tutorials build off one another and should be completed in the following order
+1. generate/
+2. transport/
+3. drift/
+
