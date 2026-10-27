@@ -31,9 +31,11 @@ def generate(
     momenta = ccqe_kinematics(muon_angle)
     table = GenEventTable(event_number)
     for position in positions:
+        print('ADDING POSITION', position)
         vtx = table.add_vertex(*position)
         table.add_particle(vtx, 13, 1, momenta["muon"], mmu)
         table.add_particle(vtx, 2212, 1, momenta["proton"], mp)
+    print(table.to_array())
     return table.to_array()
 
 
@@ -67,6 +69,7 @@ def PHLEX_REGISTER_PROVIDERS(s, config):
         {"di": "data_cell_index", "return": npt.NDArray[np.float64]},
         "generate",
     )
+    print('suffix', phlex_config.get(config, "suffix", "particles"))
     s.provide(
         f,
         {

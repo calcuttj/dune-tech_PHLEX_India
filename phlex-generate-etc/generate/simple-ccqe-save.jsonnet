@@ -6,20 +6,19 @@
     },
   },
   sources: {
-    // Python generator: provides a particle table (creator 'pygen', suffix 'particles')
-    pygen: {
+    pygen: { /// <--- Our generator serves as a source for this job
       py: 'plugin_generator',
       layer: 'event',
       muon_angle: 45,
+      positions: ['-180 300 115']
     },
   },
   modules: {
-    // Particle table -> HepMC3::GenEvent (creator 'input', suffix 'genevent')
-    assemble: {
+    assemble: { /// <--- We convert the flat table created in the generator to a HepMC3::GenEvent
       cpp: 'genevent_from_table',
       input_layer: 'event',
     },
-    convert: {
+    convert: { /// <--- This step converts the HepMC3::GenEvent into a HepMC3::GenEventData
       cpp: 'convert_hepmcevent_to_data',
       input_layer: 'event',
     },
