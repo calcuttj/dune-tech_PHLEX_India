@@ -20,13 +20,13 @@ def ccqe_kinematics(theta_mu, enu=1.0):
 
     pmu = math.sqrt(emu * emu - mmu * mmu)
     pmu_z = math.cos(thetamu) * pmu
-    pmu_t = math.sin(thetamu) * pmu #Transverse momentum -- define this to be y-direction below
+    pmu_t = math.sin(thetamu) * pmu #Transverse momentum -- define this to be x-direction below
 
     # enu == pnu == p_proton + p_muon
     pp_z = enu - pmu_z
     ep = math.sqrt(pp_z*pp_z + pmu_t*pmu_t + mp*mp) # E = srqt(m^2 + p^2) w/ transverse momentum balance |pp_t| = |pmu_t|
     return {
-        'muon': (0, pmu_t, pmu_z, emu), # Muon 4-momentum
-        'proton': (0, -pmu_t, pp_z, ep) # Proton 4-momentum
+        'muon': (pmu_t, 0, pmu_z, emu), # Muon 4-momentum
+        'proton': (-pmu_t, 0, pp_z, ep) # Proton 4-momentum
     }
 

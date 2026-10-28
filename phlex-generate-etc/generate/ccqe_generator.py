@@ -1,4 +1,4 @@
-"""Phlex source for the CCQE kinematics in generator.py.
+"""Phlex source for the CCQE kinematics in ccqe_kinematics.py.
 
 Generates one nu + n -> mu + p interaction per vertex, so an event can hold
 several vertices, each with its outgoing muon and proton.  The event is
@@ -10,7 +10,7 @@ import numpy as np
 import numpy.typing as npt
 
 import phlex_config
-from generator import ccqe_kinematics, mmu, mp
+from ccqe_kinematics import ccqe_kinematics, mmu, mp
 from genevent_table import GenEventTable
 from phlex import Variant
 
@@ -35,7 +35,7 @@ def generate(
         vtx = table.add_vertex(*position)
         table.add_particle(vtx, 13, 1, momenta["muon"], mmu)
         table.add_particle(vtx, 2212, 1, momenta["proton"], mp)
-    print(table.to_array())
+    
     return table.to_array()
 
 
@@ -69,7 +69,6 @@ def PHLEX_REGISTER_PROVIDERS(s, config):
         {"di": "data_cell_index", "return": npt.NDArray[np.float64]},
         "generate",
     )
-    print('suffix', phlex_config.get(config, "suffix", "particles"))
     s.provide(
         f,
         {

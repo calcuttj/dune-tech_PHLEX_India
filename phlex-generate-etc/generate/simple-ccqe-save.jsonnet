@@ -7,7 +7,7 @@
   },
   sources: {
     pygen: { /// <--- Our generator serves as a source for this job
-      py: 'plugin_generator',
+      py: 'ccqe_generator',
       layer: 'event',
       muon_angle: 45,
       positions: ['-180 300 115']
