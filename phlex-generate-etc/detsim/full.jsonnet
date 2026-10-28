@@ -1,8 +1,3 @@
-local spd = {
-  config: 'wc-cfg/sim-sigproc.jsonnet',
-  plugins: ['WireCellGen', 'WireCellSigProc', 'WireCellAux', 'WireCellPgraph'],
-};
-
 {
   driver: {
     cpp: 'generate_layers',
@@ -11,31 +6,12 @@ local spd = {
     },
   },
   sources: {
-
-    //gun: {
-    //  cpp: 'hmp_gen_event_gun',
-    //  output_layer: 'event',
-    //  pdg: 11,             // e-
-    //  mass: 0.511,         // MeV
-    //  energy: 1000.0,         // MeV kinetic
-    //  direction: [0, 0, 1],
-    //  position: [-1800, 3500, 1300],  // mm, ~center of the drift vol
-    //  number: 1,
-    //  momentum_unit: 'MeV',
-    //  length_unit: 'mm',
-    //},
     pygen: { /// <--- Our generator serves as a source for this job
-      py: 'plugin_generator',
+      py: 'ccqe_generator',
       layer: 'event',
-      //suffix: 'genevent',
-      //creator: 'input',
       muon_angle: 45,
       positions: ['-180 300 115']
     },
-    // simple_generate: {
-    //   cpp: 'simple_generator_hepmc',
-    //   layer: 'event',
-    // },
   },
   modules: {
    from_table: { /// <--- We convert the flat table created in the generator to a HepMC3::GenEvent
@@ -45,9 +21,7 @@ local spd = {
     edep_sim_tracking: {
       cpp: 'esp_tracking',
       input_layer: 'event',
-      // gdml: '/home/jacob/Downloads/protodunehd_v8_refactored.gdml',
       gdml: 'gdml/pdhd_like.gdml',
-      // gdml: '/home/jacob/phlex-work/dune/xerosere/tests/edep-simphony/geometry/benchmark_small.gdml',
       // edep-sim's preamble leaves optical photons unstacked (killed) on the
       // CPU; turn scintillation stacking on so photons are tracked to the
       // photon-detector shell and land in TG4Event.PhotonDetectors.  (This is
@@ -75,7 +49,6 @@ local spd = {
       wct_tla: { ionization: 'recombination' },
     },
 
-    // --- COMMON drift island (deposet -> deposet) -------------------------
     drift: {
       cpp: 'wcph_deposet_filter',
       inputs: [{ creator: 'sampler', layer: 'event', suffix: 'deposet' }],
@@ -84,8 +57,6 @@ local spd = {
       wct_plugins: ['WireCellGen', 'WireCellAux', 'WireCellPgraph'],
       wct_tla: { detector: 'pdhd', anode_index: '0', input: 'deposet' },
     },
-//
-    //// --- CHAIN A': sim then signal processing, separately (pre-drifted) ---
     sim: {
       cpp: 'wcph_deposet_to_frame',
       inputs: [{ creator: 'drift', layer: 'event', suffix: 'deposet' }],
@@ -94,6 +65,7 @@ local spd = {
       wct_plugins: ['WireCellGen', 'WireCellSigProc', 'WireCellAux', 'WireCellPgraph'],
       wct_tla: { detector: 'pdhd', anode_index: '0', input: 'drifted' },
     },
+    
     sp: {
       cpp: 'wcph_frame_filter',
       inputs: [{ creator: 'sim', layer: 'event', suffix: 'frame' }],

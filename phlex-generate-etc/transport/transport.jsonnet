@@ -8,7 +8,7 @@
   sources: {
     // Python generator: provides a particle table (creator 'pygen', suffix 'particles')
     pygen: {
-      py: 'plugin_generator', ##TODO -- REPLACE THIS WITH THE SKELETON
+      py: 'ccqe_generator', ##TODO -- REPLACE THIS WITH THE SKELETON
       layer: 'event',
       muon_angle: 45,
       positions: ['-180 300 115']
